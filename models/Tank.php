@@ -33,6 +33,10 @@ class Tank extends \yii\db\ActiveRecord
 		];
 		return implode($this::ARMOR_DELIMITER, $armor_array);
 	}
+	public function getTankClass(){
+		//у легких танков лобовая броня меньше 50мм
+		return $this->tank_armor_lob < 50 ? 'tank-light' : 'tank-heavy';
+	}
 	//связные данные
 	public function getTankIdGuns(){
 		return $this->hasMany(TankGun::classname(), ['tank_id' => 'tank_id']);

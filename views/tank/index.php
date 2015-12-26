@@ -14,7 +14,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-			'tank_name',
+			[
+				'attribute' => 'tank_name',
+				'contentOptions' => function($model, $key, $index, $column){
+					//все танки, кроме легких - полужирным шрифтом
+					return ['class' => $model->tankClass];
+				},
+			],
 			'tankArmor',
 			'tankGunLine',
 			
