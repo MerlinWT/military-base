@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 			'tank_name',
 			'tankArmor',
-			'tankGunList',
+			'tankGunLine',
+			
         ],
 		//'layout' => "{summary}\n{items}",
         'summary' => "Количество записей: {count} из {totalCount}.",

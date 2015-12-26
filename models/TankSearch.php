@@ -11,12 +11,14 @@ use app\models\TankGun;
 
 class TankSearch extends Tank
 {
+	public $tankArmor;
+	public $tankGunLine;
     public function rules()
     {
         return [
             [['tank_name'], 'safe'],
 			[['tankArmor'], 'safe'],
-			[['tankGunList'], 'safe'],
+			[['tankGunLine'], 'safe'],
         ];
     }
     public function scenarios()
@@ -32,37 +34,49 @@ class TankSearch extends Tank
 			'sort' => ['attributes'=>[
 					'tank_name',
 					'tankArmor'=>[
-						'asc'=>['tank_armor_lob'=>SORT_ASC,'tank_armor_side'=>SORT_ASC,'tank_armor_rear'=>SORT_ASC],
-						'desc'=>['tank_armor_lob'=>SORT_DESC,'tank_armor_side'=>SORT_DESC,'tank_armor_rear'=>SORT_DESC],
+						'asc'=>[
+							'tank_armor_lob'=>SORT_ASC,
+							'tank_armor_side'=>SORT_ASC,
+							'tank_armor_rear'=>SORT_ASC,
+						],
+						'desc'=>[
+							'tank_armor_lob'=>SORT_DESC,
+							'tank_armor_side'=>SORT_DESC,
+							'tank_armor_rear'=>SORT_DESC,
+						],
 					],
-					'tankGunList',
+					'tankGunLine'=>[
+						'asc'=>[
+							'gun.gun_caliber'=>SORT_ASC,
+							'gun.gun_name'=>SORT_ASC,
+						],
+						'desc'=>[
+							'gun.gun_caliber'=>SORT_DESC,
+							'gun.gun_name'=>SORT_DESC,
+						],
+					],
 				]
 			]
         ]);
-
         $this->load($params);
         if (!$this->validate()) {
             return $dataProvider;
         }
-		
-		$tankArmor_calc = 'CONCAT(tank_armor_lob, "/", tank_armor_side, "/", tank_armor_rear)';
-		$tankGun_calc = 'CONCAT(gun.gun_caliber, " мм ", gun.gun_name)';
-		$tankGunList_calc = 'GROUP_CONCAT(CONCAT("\"",' . $tankGun_calc . ', "\"") SEPARATOR ", ")';
-		$query->select([
-				'tank_name', 
-				'tankArmor' => $tankArmor_calc, 
-				'tankGunList' => $tankGunList_calc,
-			])->joinWith('tankGuns')
-			  ->groupBy('tank_name')
-			  ->all();
-		
-
-        $query->andFilterWhere([
-            'tank_id' => $this->tank_id,
-        ]);
-        $query->andFilterWhere(['like', 'tank_name', $this->tank_name . '%', false])
-            ->andFilterWhere(['like', $tankArmor_calc, $this->tankArmor . '%', false])
-			->andFilterWhere(['like', $tankGun_calc, $this->tankGunList . '%', false]);
+		//зависимости	
+		$query->joinWith('tankGuns');
+		//фильтр имени танка
+		$query->andFilterWhere(['like', 'tank_name', $this->tank_name . '%', false]);
+		//филтр блони
+		$armor_array = Tank::parseTankArmor($this->tankArmor);
+		$query->andFilterWhere(['like', 'tank_armor_lob', $armor_array[0] . '%', false])
+			->andFilterWhere(['like', 'tank_armor_side', $armor_array[1] . '%', false])
+			->andFilterWhere(['like', 'tank_armor_rear', $armor_array[2] . '%', false]);
+		//фильтр орудий
+		$gun_array = Gun::ParseFullName($this->tankGunLine);
+		$query->andFilterWhere(['like', 'gun.gun_caliber', $gun_array[0] . '%', false])
+			->andFilterWhere(['like', 'gun.gun_name', $gun_array[1] . '%', false]);
+				
+		$query->all();
         return $dataProvider;
     }
 }
