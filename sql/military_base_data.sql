@@ -11,6 +11,14 @@ INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('З
 INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Kw.K. 42 L/70', 75, 150);
 INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Kw.K. L/28', 105, 64);
 INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Kw.K. 36 L/56', 88, 132);
+
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Д-5Т', 85, 120);
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Д-5Т-85БМ', 85, 144);
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('Д-10Т', 100, 175);
+
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('ЗиС-5', 76, 86);
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('У-11', 122, 61);
+INSERT INTO military_base.gun(gun_name, gun_caliber ,gun_penetratoin)VALUES ('проект 413', 57, 112);
 /*Совсестивость*/
 /*Т34*/
 INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (1,1);
@@ -19,4 +27,8 @@ INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (1,3);
 /*Тигр*/
 INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (2,4);
 INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (2,5);
-INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (2,5);
+INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (2,6);
+/*Ис*/
+INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (3,7);
+INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (3,8);
+INSERT INTO military_base.tank_gun(tank_id, gun_id) VALUES (3,9);
