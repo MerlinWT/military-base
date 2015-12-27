@@ -12,12 +12,13 @@ class Tank extends \yii\db\ActiveRecord
     public static function tableName(){
         return 'tank';
     }
+	
     public function attributeLabels()
     {
         return [
             'tank_name' => 'Наименование',
             'tankArmor' => 'Броня',
-            'tankGunList' => 'Совместимые орудия',
+            'tankGunLine' => 'Совместимые орудия',
         ];
     }
 	public static function parseTankArmor($aValue){
@@ -31,7 +32,13 @@ class Tank extends \yii\db\ActiveRecord
 			$this->tank_armor_side,
 			$this->tank_armor_rear,
 		];
-		return implode($this::ARMOR_DELIMITER, $armor_array);
+		return $this->tank_armor_lob ? implode($this::ARMOR_DELIMITER, $armor_array) : '';
+	}
+	public function setTankArmor($value){
+		$armor_array = $this->parseTankArmor($value);
+		$this->tank_armor_lob = $armor_array[0];
+		$this->tank_armor_side = $armor_array[1];
+		$this->tank_armor_rear = $armor_array[2];
 	}
 	public function getTankClass(){
 		//у легких танков лобовая броня меньше 50мм
@@ -51,5 +58,8 @@ class Tank extends \yii\db\ActiveRecord
 			$gun_array[] = $row->GunFullName;
 		}
 		return implode(', ', $gun_array);
+	}
+	public function setTankGunLine($value){
+		//var_dump($value);
 	}
 }

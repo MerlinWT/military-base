@@ -12,8 +12,8 @@ class Gun extends \yii\db\ActiveRecord
 		return $this->gun_caliber . $this::CAPTION_DELIMITER . $this->gun_name;
 	}
 	//Разбираем полное имя на части: калибр, наименование
-	public static function parseFullName($aValue){
-		return explode(self::CAPTION_DELIMITER, $aValue);
+	public static function parseFullName($value){
+		return explode(self::CAPTION_DELIMITER, $value);
 	}
 	public function getGunFullName(){
 		return '"' . $this->BuildFullName() . '"';

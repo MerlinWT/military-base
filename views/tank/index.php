@@ -7,6 +7,9 @@ $this->title = 'Список танков';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tank-index">
+    <p>
+        <?= Html::a('Добавить танк', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
     <h1><?= Html::encode($this->title) ?></h1>
 

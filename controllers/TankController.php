@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Tank;
 use app\models\TankSearch;
+use app\models\TankCreate;
+use app\models\Gun;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
@@ -32,5 +34,12 @@ class TankController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+	public function actionCreate(){
+		$model = new TankCreate();
+		if ($model->load(Yii::$app->request->post()) && $model->save()){
+			return $this->redirect(['index']);
+		}else{
+			return $this->render('create', ['model' => $model]);
+		}
+	}
 }
