@@ -11,8 +11,6 @@ use app\models\TankGun;
 
 class TankCreate extends Tank
 {
-	//public $tankArmor;
-	public $tankGunLine;
 	public function scenarios()
     {
         return Model::scenarios();

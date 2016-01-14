@@ -52,6 +52,9 @@ class Tank extends \yii\db\ActiveRecord
 		return $this->hasMany(Gun::className(), ['gun_id' => 'gun_id'])
 					->via('tankIdGuns');
 	}
+    public function setTankGuns($guns){
+        $this->populateRelation('tankGuns', $guns);
+    }
 	public function getTankGunLine(){
 		$gun_array = [];
 		foreach($this->tankGuns as $row){
@@ -59,7 +62,33 @@ class Tank extends \yii\db\ActiveRecord
 		}
 		return implode(', ', $gun_array);
 	}
-	public function setTankGunLine($value){
-		//var_dump($value);
-	}
+    public function setTankGunLine($gunString){
+        $fullname_list = explode(';', $gunString);
+        foreach ($fullname_list as $fullname){
+            $attributes = Gun::parseFullName($fullname);
+            if (Gun::find()->where(['gun_caliber' => $attributes[0], 'gun_name' => $attributes[1]])->exists()){
+                //echo 'нашли!';
+                $guns[] = Gun::findOne(['gun_caliber' => $attributes[0], 'gun_name' => $attributes[1]]);
+            }else{
+                //echo 'НЕ нашли - надо создать';
+                $gun = new Gun();
+                $gun->gun_caliber = $attributes[0];
+                $gun->gun_name = $attributes[1];
+                $gun->save();
+                $guns[] = $gun;
+            }
+            $this->setTankGuns($guns);
+        }
+    }
+    public function afterSave($true, $changedAttributes){
+        $relatedRecords = $this->getRelatedRecords();
+        $guns = $relatedRecords['tankGuns'];
+        foreach ($guns as $index => $gun){
+            $tank_gun = new TankGun();
+            $tank_gun->tank_id = $this->tank_id;
+            $tank_gun->gun_id = $gun->gun_id;
+            $tank_gun->save();
+        }
+
+    }
 }

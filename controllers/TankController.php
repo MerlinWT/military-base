@@ -34,6 +34,7 @@ class TankController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
 	public function actionCreate(){
 		$model = new TankCreate();
 		if ($model->load(Yii::$app->request->post()) && $model->save()){
@@ -41,5 +42,6 @@ class TankController extends Controller
 		}else{
 			return $this->render('create', ['model' => $model]);
 		}
+
 	}
 }
